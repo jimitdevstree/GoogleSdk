@@ -1,0 +1,3 @@
+include ':GoogleLogInSDK'
+include ':app'
+rootProject.name = "GoogleSdk"
