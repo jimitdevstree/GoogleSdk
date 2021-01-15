@@ -11,9 +11,9 @@ class GoogleLoginResponseData : Serializable {
     var loginId: String = ""
     var name: String = ""
     var email: String = ""
-    var mobile: String = ""
+    /*var mobile: String = ""
     var gender: String = ""
-    var birthday: String = ""
+    var birthday: String = ""*/
     var profilePic: String = ""
 
 }

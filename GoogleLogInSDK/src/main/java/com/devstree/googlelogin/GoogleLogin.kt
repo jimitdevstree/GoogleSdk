@@ -101,7 +101,7 @@ open class GoogleLogin {
 
     fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         try {
-            if (resultCode == RESULT_OK && data != null) {
+            if (requestCode == RC_SIGN_IN && resultCode == RESULT_OK && data != null) {
                 val account =
                     GoogleSignIn.getSignedInAccountFromIntent(data)
                         .getResult(ApiException::class.java)
