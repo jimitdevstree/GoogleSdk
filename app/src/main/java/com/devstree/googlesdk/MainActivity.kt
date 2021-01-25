@@ -7,6 +7,7 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
 import com.devstree.googlelogin.GoogleLogin
 import com.devstree.googlelogin.GoogleLoginResponse
 import com.devstree.googlelogin.GoogleLoginResponseData
@@ -34,6 +35,7 @@ class MainActivity : AppCompatActivity(), GoogleLoginResponse {
 
     private fun getUserData(responseData: GoogleLoginResponseData) {
         binding.loginData.text = "User Name: ${responseData.name}\n Email: ${responseData.email}\n"
+        Glide.with(this).load(responseData.profilePic).into(binding.image)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

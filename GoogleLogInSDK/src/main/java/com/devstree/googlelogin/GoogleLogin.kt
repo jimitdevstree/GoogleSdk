@@ -3,7 +3,6 @@ package com.devstree.googlelogin
 import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.content.Intent
-import android.widget.Toast
 import androidx.core.app.ActivityCompat.startActivityForResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -18,7 +17,7 @@ import com.google.android.gms.common.api.ApiException
 
 open class GoogleLogin {
 
-    private lateinit var mGoogleSignInClient: GoogleSignInClient
+    private var mGoogleSignInClient: GoogleSignInClient? = null
     var activity: Activity? = null
     private var callBack: GoogleLoginResponse? = null
     val RC_SIGN_IN: Int = 10101
@@ -41,10 +40,10 @@ open class GoogleLogin {
      */
 
     fun logout() {
-        mGoogleSignInClient.signOut()
+        mGoogleSignInClient?.signOut()
             ?.addOnCompleteListener(activity!!) {
-                Toast.makeText(activity, "SignOut Successful", Toast.LENGTH_LONG)
-                    .show()
+                /* Toast.makeText(activity, "SignOut Successful", Toast.LENGTH_LONG)
+                     .show()*/
             }
     }
 
@@ -58,14 +57,15 @@ open class GoogleLogin {
             .requestEmail()
             .build()
 
+        mGoogleSignInClient = GoogleSignIn.getClient(activity!!, gso)
+
         val accountData: GoogleSignInAccount? = GoogleSignIn.getLastSignedInAccount(activity)
         if (accountData != null) {
             handleSignInResult(accountData)
             return
         } else {
-            mGoogleSignInClient = GoogleSignIn.getClient(activity!!, gso)
-            val signInIntent = mGoogleSignInClient.signInIntent
-            startActivityForResult(activity!!, signInIntent, RC_SIGN_IN, null)
+            val signInIntent = mGoogleSignInClient?.signInIntent
+            startActivityForResult(activity!!, signInIntent!!, RC_SIGN_IN, null)
         }
     }
 
@@ -81,7 +81,7 @@ open class GoogleLogin {
         loginData.email = account.email.orEmpty()
         loginData.name = account.displayName.orEmpty()
         loginData.loginId = account.id.orEmpty()
-        loginData.profilePic = account.photoUrl?.path.orEmpty()
+        loginData.profilePic = account.photoUrl.toString()
 
 //        Toast.makeText(activity, "Sign-in Successful", Toast.LENGTH_SHORT).show()
 
@@ -108,7 +108,7 @@ open class GoogleLogin {
                 handleSignInResult(account)
             }
         } catch (e: ApiException) {
-           callBack?.onFailure("SignInResult fail code=${e.statusCode}")
+            callBack?.onFailure("SignInResult fail code=${e.statusCode}")
         }
     }
 }
